@@ -48,6 +48,7 @@ dependencies {
         exclude("junit", "junit")
     }
     testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation ("com.willowtreeapps.assertk:assertk-jvm:0.24")
 }
 
 dependencyManagement {
