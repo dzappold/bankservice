@@ -9,4 +9,8 @@ class UserService {
     fun retrieveAllUsers(): Collection<User> {
         TODO("Not yet implemented")
     }
+
+    fun retrieveUser(customerNumber: String): User {
+        TODO("Not yet implemented")
+    }
 }

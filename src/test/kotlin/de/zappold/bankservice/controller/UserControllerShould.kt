@@ -1,5 +1,6 @@
 package de.zappold.bankservice.controller
 
+import de.zappold.bankservice.model.User
 import de.zappold.bankservice.services.UserService
 import io.mockk.every
 import io.mockk.mockk
@@ -19,5 +20,17 @@ class UserControllerShould {
         userController.retrieveAllUsers()
 
         verify(exactly = 1) { userService.retrieveAllUsers() }
+    }
+
+    @Test
+    internal fun `interact with user service for retrieving specific user by customer number`() {
+        val customerNumber = "RYk"
+        val userService = mockk<UserService>()
+        every { userService.retrieveUser(customerNumber) } returns User()
+
+        val userController = UserController(userService)
+        userController.retrieveUser(customerNumber)
+
+        verify(exactly = 1) { userService.retrieveUser(customerNumber) }
     }
 }
