@@ -24,12 +24,14 @@ repositories {
     mavenCentral()
 }
 
-extra["testcontainersVersion"] = "1.15.3"
+val testcontainersVersion: String by project
 val arrowVersion: String by project
 val detektVersion: String by project
 val mockkVersion: String by project
 val hamkrestVersion: String by project
 val archunitVersion: String by project
+val hsqldbVersion: String by project
+val assertkVersion: String by project
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -49,14 +51,14 @@ dependencies {
         exclude("junit", "junit")
     }
     testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.24")
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:$assertkVersion")
 
-    testRuntimeOnly("org.hsqldb:hsqldb:2.6.0")
+    testRuntimeOnly("org.hsqldb:hsqldb:$hsqldbVersion")
 }
 
 dependencyManagement {
     imports {
-        mavenBom("org.testcontainers:testcontainers-bom:${property("testcontainersVersion")}")
+        mavenBom("org.testcontainers:testcontainers-bom:$testcontainersVersion")
     }
 }
 

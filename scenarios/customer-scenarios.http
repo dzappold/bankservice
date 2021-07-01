@@ -1,0 +1,72 @@
+###
+GET http://localhost:8080/api/v0/users
+
+
+###
+GET http://localhost:8080/api/v0/users/2
+
+
+###
+POST http://localhost:8080/api/v0/customers
+Content-Type: application/json
+
+{
+  "firstName": "0RM1jb85",
+  "lastName": "Fvx",
+  "gender": "MALE",
+  "birthday": "1977-06-30"
+}
+
+###
+POST http://localhost:8080/api/v0/customers
+Content-Type: application/json
+
+{
+  "firstName": "1Eys",
+  "lastName": "57S",
+  "gender": "DIVERSE",
+  "birthday": "2001-12-30"
+}
+
+###
+POST http://localhost:8080/api/v0/customers
+Content-Type: application/json
+
+{
+  "firstName": "Bb8nYhI",
+  "lastName": "I95GzWN",
+  "gender": "FEMALE",
+  "birthday": "1996-08-14"
+}
+
+
+###
+PATCH http://localhost:8080/api/v0/customers
+Content-Type: application/json
+
+{
+  "firstName": "daniel",
+  "lastName": "maier",
+  "gender": "MALE",
+  "birthday": "1977-06-30",
+  "customerNumber": "59",
+  "id": 1
+}
+
+
+###
+PATCH http://localhost:8080/api/v0/customers
+Content-Type: application/json
+
+{
+  "firstName": "daniel",
+  "lastName": "mueller",
+  "gender": "MALE",
+  "birthday": "1977-06-30",
+  "customerNumber": "178",
+  "id": 1
+}
+
+
+###
+DELETE http://localhost:8080/api/v0/customers/1

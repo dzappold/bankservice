@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  database:
+    container_name: bank-service-repository
+    hostname: bank-service-repository
+    image: postgres:13.3-alpine
+    ports:
+      - 18080:8080
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: bankservice
+
+  application:
+    container_name: bank-service
+    build: .
+    ports:
+      - 8090:8080
+    expose:
+      - 8080
