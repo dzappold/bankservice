@@ -1,8 +1,8 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot")
@@ -10,6 +10,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
     kotlin("plugin.jpa")
+    kotlin("plugin.allopen")
     id("com.github.ben-manes.versions")
     id("io.gitlab.arturbosch.detekt")
 }
@@ -17,7 +18,7 @@ plugins {
 group = "de.zappold"
 version = "0.0.1-SNAPSHOT"
 
-java.sourceCompatibility = JavaVersion.VERSION_16
+java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
@@ -32,8 +33,8 @@ val archunitVersion: String by project
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(kotlin("reflect"))
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -41,14 +42,16 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.testcontainers:junit-jupiter"){
+    testImplementation("org.testcontainers:junit-jupiter") {
         exclude("junit", "junit")
     }
-    testImplementation("org.testcontainers:postgresql"){
+    testImplementation("org.testcontainers:postgresql") {
         exclude("junit", "junit")
     }
     testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation ("com.willowtreeapps.assertk:assertk-jvm:0.24")
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.24")
+
+    testRuntimeOnly("org.hsqldb:hsqldb:2.6.0")
 }
 
 dependencyManagement {
@@ -60,7 +63,7 @@ dependencyManagement {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "16"
+        jvmTarget = "11"
     }
 }
 
@@ -86,6 +89,12 @@ tasks.withType<DependencyUpdatesTask> {
     outputFormatter = "json"
     outputDir = "build/dependencyUpdates"
     reportfileName = "report"
+}
+
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.Embeddable")
+    annotation("javax.persistence.MappedSuperclass")
 }
 
 detekt {

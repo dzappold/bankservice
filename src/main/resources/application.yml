@@ -1,0 +1,21 @@
+spring:
+
+  datasource:
+    driver-class-name: "org.postgresql.Driver"
+    url: "jdbc:postgresql://192.168.64.2:5432/bankservice"
+    username: "postgres"
+    password: "mysecretpassword"
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: off
+    generate-ddl: off
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  main:
+    banner-mode: off
+logging:
+  level:
+    web: error
+    root: info

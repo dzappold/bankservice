@@ -12,6 +12,7 @@ pluginManagement {
                 "org.jetbrains.kotlin.jvm" -> useVersion(kotlinVersion)
                 "org.jetbrains.kotlin.plugin.spring" -> useVersion(kotlinVersion)
                 "org.jetbrains.kotlin.plugin.jpa" -> useVersion(kotlinVersion)
+                "org.jetbrains.kotlin.plugin.allopen" -> useVersion(kotlinVersion)
                 "org.jetbrains.kotlin.kapt" -> useVersion(kotlinVersion)
                 "com.github.ben-manes.versions" -> useVersion(benManesVersion)
                 "io.gitlab.arturbosch.detekt" -> useVersion(detektVersion)
