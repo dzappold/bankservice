@@ -14,8 +14,7 @@ import java.time.LocalDate
 class CustomerControllerShould {
     private val miriamMueller =
         Customer(
-            id = null,
-            customerNumber = "kdnr4711",
+            customerNumber = null,
             lastName = "Müller",
             firstName = "Miriam",
             birthday = LocalDate.parse("2000-03-17"),

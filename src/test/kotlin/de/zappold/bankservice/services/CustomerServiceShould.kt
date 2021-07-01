@@ -79,11 +79,12 @@ class CustomerServiceShould {
         // CustomerRepository::findByIdOrNull is an extension function therefore we need mockkStatic
         mockkStatic(CustomerRepository::findByIdOrNull)
 
-        every { customerRepository.findByIdOrNull(any()) } returns susanneMaier(17L)
-        every { customerRepository.save(any()) } returns mariaSchmidt(17L)
+        val customerNumber = 17L
+        every { customerRepository.findByIdOrNull(any()) } returns susanneMaier(customerNumber)
+        every { customerRepository.save(any()) } returns mariaSchmidt(customerNumber)
 
-        customerService.updateCustomer(mariaSchmidt(17L))
-        verify(exactly = 1) { customerRepository.findByIdOrNull(17) }
+        customerService.updateCustomer(mariaSchmidt(customerNumber))
+        verify(exactly = 1) { customerRepository.findByIdOrNull(customerNumber) }
     }
 
     @Test
@@ -101,21 +102,6 @@ class CustomerServiceShould {
             verify(exactly = 1) { customerRepository.findByIdOrNull(17) }
         }
     }
-    @Test
-    internal fun `interact with customer repository for update customer with modified customer number`() {
-        // CustomerRepository::findByIdOrNull is an extension function therefore we need mockkStatic
-        mockkStatic(CustomerRepository::findByIdOrNull)
-
-        every { customerRepository.findByIdOrNull(any()) } returns mariaSchmidt(17)
-
-        assertAll {
-            assertThrows<UnsupportedOperationException> {
-                customerService.updateCustomer(mariaSchmidt(17L, "kdnr 666"))
-            }
-
-            verify(exactly = 1) { customerRepository.findByIdOrNull(17) }
-        }
-    }
 
     @Test
     internal fun `interact with customer repository for delete customer`() {
@@ -127,9 +113,8 @@ class CustomerServiceShould {
         verify(exactly = 1) { customerRepository.deleteById(idToDelete) }
     }
 
-    private fun mariaSchmidt(id: Long?, customerNumber: String = "kdnr 0815") =
+    private fun mariaSchmidt(customerNumber: Long?) =
         Customer(
-            id = id,
             customerNumber = customerNumber,
             lastName = "Schmidt",
             firstName = "Maria",
@@ -137,9 +122,8 @@ class CustomerServiceShould {
             gender = FEMALE
         )
 
-    private fun susanneMaier(id: Long?, customerNumber: String = "kdnr 0815") =
+    private fun susanneMaier(customerNumber: Long?) =
         Customer(
-            id = id,
             customerNumber = customerNumber,
             lastName = "Maier",
             firstName = "Susanne",

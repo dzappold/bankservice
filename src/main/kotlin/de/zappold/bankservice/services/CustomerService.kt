@@ -11,16 +11,15 @@ class CustomerService(private val customerRepository: CustomerRepository) {
     fun retrieveAllCustomers(): Collection<Customer> =
         customerRepository.findAll()
 
-    fun retrieveCustomer(id: String): Customer =
+    fun retrieveCustomer(customerNumber: String): Customer =
         customerRepository
-            .findByIdOrNull(id.toLong())
-            .orThrow { customerNotFound(id) }
+            .findByIdOrNull(customerNumber.toLong())
+            .orThrow { customerNotFound(customerNumber) }
 
     fun createCustomer(customer: Customer): Customer =
         customerRepository.save(
             Customer(
                 null,
-                customer.customerNumber,
                 customer.lastName,
                 customer.firstName,
                 customer.birthday,
@@ -29,33 +28,17 @@ class CustomerService(private val customerRepository: CustomerRepository) {
         )
 
     fun updateCustomer(customer: Customer): Customer =
-        customer
-            .takeIfCustomerNumberStaysSame()
-            .saveCustomer(customer)
+        (customerRepository.findByIdOrNull(customer.customerNumber)?.let {
 
-    fun deleteCustomer(id: String): Unit =
-        customerRepository.deleteById(id.toLong())
+            customerRepository.save(customer)
+        } ?: throw customerNotFound(customer.customerNumber.toString()))
 
-    private fun Customer.saveCustomer(customer: Customer): Customer =
-        run { customerRepository.save(customer) }
+    fun deleteCustomer(customerNumber: String): Unit =
+        customerRepository.deleteById(customerNumber.toLong())
 
-    private fun Customer.takeIfCustomerNumberStaysSame() =
-        takeIf { retrieveExistingCustomerNumberFor(id) == customerNumber }
-            ?: throw changingCustomerNumberNotAllowed()
+    private fun customerNotFound(customerNumber: String) =
+         NoSuchElementException("No customer with customer number '$customerNumber' found.")
 
-    private fun retrieveExistingCustomerNumberFor(id: Long?) =
-        retrieveExistingCustomer(id).customerNumber
-
-    private fun retrieveExistingCustomer(id: Long?) =
-        customerRepository
-            .findByIdOrNull(id)
-            .orThrow { customerNotFound(id.toString()) }
-
-    private fun customerNotFound(id: String) =
-        NoSuchElementException("No customer with customer number '$id' found.")
-
-    private fun changingCustomerNumberNotAllowed() =
-        UnsupportedOperationException("Changing the customer number is not allowed.")
 }
 
 private fun Customer?.orThrow(failure: () -> Exception): Customer =
