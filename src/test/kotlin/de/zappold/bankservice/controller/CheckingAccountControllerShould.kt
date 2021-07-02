@@ -52,4 +52,7 @@ class CheckingAccountControllerShould {
 
         verify(exactly = 1) { checkingAccountService.updateCheckingAccount(checkingAccount) }
     }
+
+    // TODO: /api/v0/checkingAccount/accountNumber/deposit/700
+    // TODO: /api/v0/checkingAccount/accountNumber/withdrawal/700
 }
