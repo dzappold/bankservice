@@ -28,9 +28,9 @@ class CustomerController(private val customerService: CustomerService) {
     fun retrieveAllCustomers(): Collection<Customer> =
         customerService.retrieveAllCustomers()
 
-    @GetMapping("/{id}")
-    fun retrieveCustomer(@PathVariable id: String): Customer =
-        customerService.retrieveCustomer(id)
+    @GetMapping("/{customerNumber}")
+    fun retrieveCustomer(@PathVariable customerNumber: String): Customer =
+        customerService.retrieveCustomer(customerNumber)
 
     @PostMapping(consumes = [APPLICATION_JSON_VALUE])
     @ResponseStatus(CREATED)
@@ -41,16 +41,8 @@ class CustomerController(private val customerService: CustomerService) {
     fun updateCustomer(@RequestBody customer: Customer): Customer =
         customerService.updateCustomer(customer)
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{customerNumber}")
     @ResponseStatus(NO_CONTENT)
-    fun deleteCustomer(@PathVariable id: String): Unit =
-        customerService.deleteCustomer(id)
-
-    @ExceptionHandler(NoSuchElementException::class)
-    fun handleNotFound(e: NoSuchElementException): ResponseEntity<String> =
-        ResponseEntity(e.message, NOT_FOUND)
-
-    @ExceptionHandler(IllegalArgumentException::class)
-    fun handleBadRequest(e: IllegalArgumentException): ResponseEntity<String> =
-        ResponseEntity(e.message, BAD_REQUEST)
+    fun deleteCustomer(@PathVariable customerNumber: String): Unit =
+        customerService.deleteCustomer(customerNumber)
 }
