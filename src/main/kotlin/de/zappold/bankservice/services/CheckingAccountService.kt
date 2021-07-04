@@ -16,21 +16,16 @@ class CheckingAccountService(private val checkingAccountRepository: CheckingAcco
             ?: accountNumberNotFound(accountNumber)
 
     fun createCheckingAccount(checkingAccount: CheckingAccount): CheckingAccount =
-        checkingAccountRepository.save(
-            CheckingAccount(
-                null,
-                checkingAccount.name,
-                checkingAccount.balance,
-                checkingAccount.dispolimit,
-                checkingAccount.pin
-            )
-        )
+        checkingAccountRepository.save(checkingAccount.copy(accountNumber = null))
 
     fun updateCheckingAccount(checkingAccount: CheckingAccount, verificationPin: String): CheckingAccount =
         checkingAccountRepository
             .findByIdOrNull(checkingAccount.accountNumber)
-            ?.let {
-                checkingAccountRepository.save(checkingAccount)
+            ?.let { existingAccount ->
+                if (existingAccount.pin == verificationPin)
+                    checkingAccountRepository.save(checkingAccount)
+                else
+                    throw AuthenticationException("Authentication failed.")
             }
             ?: accountNumberNotFound(checkingAccount.accountNumber)
 
@@ -38,3 +33,5 @@ class CheckingAccountService(private val checkingAccountRepository: CheckingAcco
 
 private fun accountNumberNotFound(accountNumber: Long?): Nothing =
     throw NoSuchElementException("Checking account with account number '$accountNumber' not found.")
+
+class AuthenticationException(override val message: String) : RuntimeException(message)

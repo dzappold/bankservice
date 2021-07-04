@@ -17,15 +17,7 @@ class CustomerService(private val customerRepository: CustomerRepository) {
             .orThrow { customerNotFound(customerNumber) }
 
     fun createCustomer(customer: Customer): Customer =
-        customerRepository.save(
-            Customer(
-                null,
-                customer.lastName,
-                customer.firstName,
-                customer.birthday,
-                customer.gender
-            )
-        )
+        customerRepository.save(customer.copy(customerNumber = null))
 
     fun updateCustomer(customer: Customer): Customer =
         customerRepository.findByIdOrNull(customer.customerNumber)?.let {
@@ -36,7 +28,7 @@ class CustomerService(private val customerRepository: CustomerRepository) {
         customerRepository.deleteById(customerNumber.toLong())
 
     private fun customerNotFound(customerNumber: String) =
-         NoSuchElementException("No customer with customer number '$customerNumber' found.")
+        NoSuchElementException("No customer with customer number '$customerNumber' found.")
 
 }
 

@@ -30,7 +30,10 @@ class CheckingAccountServiceShould {
     internal fun `retrieve specific existing checking account from repository`() {
         mockkStatic(CheckingAccountRepository::findByIdOrNull)
         val accountNumber: Long = 93
-        every { checkingAccountRepository.findByIdOrNull(accountNumber) } returns checkingAccount(accountNumber)
+        every { checkingAccountRepository.findByIdOrNull(accountNumber) } returns checkingAccount(
+            accountNumber,
+            "n3334Rw"
+        )
 
         checkingAccountService.retrieveCheckingAccount(accountNumber)
 
@@ -50,8 +53,8 @@ class CheckingAccountServiceShould {
 
     @Test
     internal fun `create a new checking account from repository`() {
-        val checkingAccount = checkingAccount(null)
-        every { checkingAccountRepository.save(checkingAccount) } returns checkingAccount(456)
+        val checkingAccount = checkingAccount(null, "n3334Rw")
+        every { checkingAccountRepository.save(checkingAccount) } returns checkingAccount(456, "n3334Rw")
 
         checkingAccountService.createCheckingAccount(checkingAccount)
 
@@ -60,10 +63,10 @@ class CheckingAccountServiceShould {
 
     @Test
     internal fun `create a new checking account with account number will override account number from repository`() {
-        val checkingAccount = checkingAccount(null)
-        every { checkingAccountRepository.save(checkingAccount) } returns checkingAccount(456)
+        val checkingAccount = checkingAccount(null, "n3334Rw")
+        every { checkingAccountRepository.save(checkingAccount) } returns checkingAccount(456, "n3334Rw")
 
-        checkingAccountService.createCheckingAccount(checkingAccount(339))
+        checkingAccountService.createCheckingAccount(checkingAccount(339, "n3334Rw"))
 
         verify(exactly = 1) { checkingAccountRepository.save(checkingAccount) }
     }
@@ -72,11 +75,12 @@ class CheckingAccountServiceShould {
     internal fun `update checking account with same values from repository`() {
         mockkStatic(CheckingAccountRepository::findByIdOrNull)
 
-        val checkingAccount = checkingAccount(467)
+        val verificationPin = "n3334Rw"
+        val checkingAccount = checkingAccount(467, verificationPin)
         every { checkingAccountRepository.findByIdOrNull(any()) } returns checkingAccount
         every { checkingAccountRepository.save(checkingAccount) } returns checkingAccount
 
-        checkingAccountService.updateCheckingAccount(checkingAccount, "2nhg")
+        checkingAccountService.updateCheckingAccount(checkingAccount, verificationPin)
 
         verify(exactly = 1) { checkingAccountRepository.save(checkingAccount) }
     }
@@ -85,12 +89,13 @@ class CheckingAccountServiceShould {
     // TODO: update checking account non existing
     // TODO: update checking account - modify balance not allowed
 
-    private fun checkingAccount(accountNumber: Long?) =
+    private fun checkingAccount(accountNumber: Long?, verificationPin: String) =
         CheckingAccount(
             accountNumber = accountNumber,
             name = "ih1",
             balance = 0,
             dispolimit = 500,
-            pin = "n3334Rw"
+            pin = verificationPin,
+            customer = mutableListOf()
         )
 }

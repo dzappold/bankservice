@@ -32,9 +32,11 @@ class CheckingAccountController(private val checkingAccountService: CheckingAcco
         checkingAccountService.createCheckingAccount(checkingAccount)
 
     @PatchMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun updateCheckingAccount(
-        @RequestBody checkingAccount: CheckingAccount,
-        @RequestBody verificationPin: String
-    ): CheckingAccount =
-        checkingAccountService.updateCheckingAccount(checkingAccount, verificationPin)
+    fun updateCheckingAccount(@RequestBody updateCheckingAccount: UpdateCheckingAccount): CheckingAccount =
+        checkingAccountService.updateCheckingAccount(
+            updateCheckingAccount.checkingAccount,
+            updateCheckingAccount.verificationPin
+        )
 }
+
+data class UpdateCheckingAccount(val verificationPin: String, val checkingAccount: CheckingAccount)

@@ -15,6 +15,7 @@ spring:
 
   main:
     banner-mode: off
+
 logging:
   level:
     web: error

@@ -5,7 +5,7 @@ spring:
 
   datasource:
     driver-class-name: "org.hsqldb.jdbc.JDBCDriver"
-    url: "jdbc:hsqldb:mem:testdb;DB_CLOSE_DELAY=-1"
+    url: "jdbc:hsqldb:mem:bankservice;DB_CLOSE_DELAY=-1"
     username: "sa"
     password: ""
     ddl-auto: create

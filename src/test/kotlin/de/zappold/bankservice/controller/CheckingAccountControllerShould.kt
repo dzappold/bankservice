@@ -21,7 +21,8 @@ class CheckingAccountControllerShould {
         name = "xyz",
         balance = 0L,
         dispolimit = 500,
-        pin = "O1MpkrP"
+        pin = "O1MpkrP",
+        customer = mutableListOf()
     )
 
     @Test
@@ -49,11 +50,15 @@ class CheckingAccountControllerShould {
     @Test
     internal fun `update a checking account from service`() {
         val verificationPin = "7XUbe"
-        checkingAccountController.updateCheckingAccount(checkingAccount, verificationPin)
+        checkingAccountController.updateCheckingAccount(UpdateCheckingAccount(verificationPin, checkingAccount))
 
         verify(exactly = 1) { checkingAccountService.updateCheckingAccount(checkingAccount, verificationPin) }
     }
 
-    // TODO: /api/v0/checkingAccount/accountNumber/deposit/700
+    // TODO: /api/v0/checkingAccount/accountNumber/deposit/700 <<-- sollte nicht public sein!
+    // besser REST-like
+    // => PATCH /api/v0/checkingAccount/accountNumber BODY: depositTransaction{deposit: 700, verificationPin: "69eS"}
     // TODO: /api/v0/checkingAccount/accountNumber/withdrawal/700
+    // besser REST-like
+    // => PATCH /api/v0/checkingAccount/accountNumber BODY: depositTransaction{withdrawal: 700, verificationPin: "69eS"}
 }
