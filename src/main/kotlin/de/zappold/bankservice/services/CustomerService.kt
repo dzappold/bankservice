@@ -28,10 +28,9 @@ class CustomerService(private val customerRepository: CustomerRepository) {
         )
 
     fun updateCustomer(customer: Customer): Customer =
-        (customerRepository.findByIdOrNull(customer.customerNumber)?.let {
-
+        customerRepository.findByIdOrNull(customer.customerNumber)?.let {
             customerRepository.save(customer)
-        } ?: throw customerNotFound(customer.customerNumber.toString()))
+        } ?: throw customerNotFound(customer.customerNumber.toString())
 
     fun deleteCustomer(customerNumber: String): Unit =
         customerRepository.deleteById(customerNumber.toLong())

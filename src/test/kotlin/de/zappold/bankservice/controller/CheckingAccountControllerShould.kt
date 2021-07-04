@@ -48,9 +48,10 @@ class CheckingAccountControllerShould {
 
     @Test
     internal fun `update a checking account from service`() {
-        checkingAccountController.updateCheckingAccount(checkingAccount)
+        val verificationPin = "7XUbe"
+        checkingAccountController.updateCheckingAccount(checkingAccount, verificationPin)
 
-        verify(exactly = 1) { checkingAccountService.updateCheckingAccount(checkingAccount) }
+        verify(exactly = 1) { checkingAccountService.updateCheckingAccount(checkingAccount, verificationPin) }
     }
 
     // TODO: /api/v0/checkingAccount/accountNumber/deposit/700

@@ -4,7 +4,6 @@ import de.zappold.bankservice.model.CheckingAccount
 import de.zappold.bankservice.services.CheckingAccountService
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -33,6 +32,9 @@ class CheckingAccountController(private val checkingAccountService: CheckingAcco
         checkingAccountService.createCheckingAccount(checkingAccount)
 
     @PatchMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun updateCheckingAccount(@RequestBody checkingAccount: CheckingAccount): CheckingAccount =
-        checkingAccountService.updateCheckingAccount(checkingAccount)
+    fun updateCheckingAccount(
+        @RequestBody checkingAccount: CheckingAccount,
+        @RequestBody verificationPin: String
+    ): CheckingAccount =
+        checkingAccountService.updateCheckingAccount(checkingAccount, verificationPin)
 }

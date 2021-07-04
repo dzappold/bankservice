@@ -30,12 +30,13 @@ class CheckingAccountServiceShould {
     internal fun `retrieve specific existing checking account from repository`() {
         mockkStatic(CheckingAccountRepository::findByIdOrNull)
         val accountNumber: Long = 93
-        every { checkingAccountRepository.findByIdOrNull(accountNumber) } returns exampleCheckingAccount(accountNumber)
+        every { checkingAccountRepository.findByIdOrNull(accountNumber) } returns checkingAccount(accountNumber)
 
         checkingAccountService.retrieveCheckingAccount(accountNumber)
 
         verify(exactly = 1) { checkingAccountRepository.findByIdOrNull(accountNumber) }
     }
+
     @Test
     internal fun `retrieve specific non-existing checking account from repository`() {
         mockkStatic(CheckingAccountRepository::findByIdOrNull)
@@ -49,23 +50,42 @@ class CheckingAccountServiceShould {
 
     @Test
     internal fun `create a new checking account from repository`() {
-        val checkingAccount = exampleCheckingAccount(null)
-        every { checkingAccountRepository.save(checkingAccount) } returns exampleCheckingAccount(456)
+        val checkingAccount = checkingAccount(null)
+        every { checkingAccountRepository.save(checkingAccount) } returns checkingAccount(456)
 
         checkingAccountService.createCheckingAccount(checkingAccount)
 
         verify(exactly = 1) { checkingAccountRepository.save(checkingAccount) }
     }
 
-    // TODO: create checking account with accountNumber set
-    // TODO: create checking account twice
+    @Test
+    internal fun `create a new checking account with account number will override account number from repository`() {
+        val checkingAccount = checkingAccount(null)
+        every { checkingAccountRepository.save(checkingAccount) } returns checkingAccount(456)
 
-    // TODO: update checking account
+        checkingAccountService.createCheckingAccount(checkingAccount(339))
+
+        verify(exactly = 1) { checkingAccountRepository.save(checkingAccount) }
+    }
+
+    @Test
+    internal fun `update checking account with same values from repository`() {
+        mockkStatic(CheckingAccountRepository::findByIdOrNull)
+
+        val checkingAccount = checkingAccount(467)
+        every { checkingAccountRepository.findByIdOrNull(any()) } returns checkingAccount
+        every { checkingAccountRepository.save(checkingAccount) } returns checkingAccount
+
+        checkingAccountService.updateCheckingAccount(checkingAccount, "2nhg")
+
+        verify(exactly = 1) { checkingAccountRepository.save(checkingAccount) }
+    }
+
     // TODO: update checking account needs pin for validation
     // TODO: update checking account non existing
     // TODO: update checking account - modify balance not allowed
 
-    private fun exampleCheckingAccount(accountNumber: Long?) =
+    private fun checkingAccount(accountNumber: Long?) =
         CheckingAccount(
             accountNumber = accountNumber,
             name = "ih1",

@@ -26,11 +26,15 @@ class CheckingAccountService(private val checkingAccountRepository: CheckingAcco
             )
         )
 
-    fun updateCheckingAccount(checkingAccount: CheckingAccount): CheckingAccount {
-        TODO("Not yet implemented")
-    }
+    fun updateCheckingAccount(checkingAccount: CheckingAccount, verificationPin: String): CheckingAccount =
+        checkingAccountRepository
+            .findByIdOrNull(checkingAccount.accountNumber)
+            ?.let {
+                checkingAccountRepository.save(checkingAccount)
+            }
+            ?: accountNumberNotFound(checkingAccount.accountNumber)
 
 }
 
-private fun accountNumberNotFound(accountNumber: Long): Nothing =
+private fun accountNumberNotFound(accountNumber: Long?): Nothing =
     throw NoSuchElementException("Checking account with account number '$accountNumber' not found.")
