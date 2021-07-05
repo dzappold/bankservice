@@ -55,10 +55,8 @@ class CheckingAccountControllerShould {
         verify(exactly = 1) { checkingAccountService.updateCheckingAccount(checkingAccount, verificationPin) }
     }
 
-    // TODO: /api/v0/checkingAccount/accountNumber/deposit/700 <<-- sollte nicht public sein!
-    // besser REST-like
-    // => PATCH /api/v0/checkingAccount/accountNumber BODY: depositTransaction{deposit: 700, verificationPin: "69eS"}
-    // TODO: /api/v0/checkingAccount/accountNumber/withdrawal/700
-    // besser REST-like
-    // => PATCH /api/v0/checkingAccount/accountNumber BODY: depositTransaction{withdrawal: 700, verificationPin: "69eS"}
+    // TODO: => PATCH /api/v0/checkingAccount/accountNumber
+    //  BODY: depositTransaction{deposit: 700, verificationPin: "69eS", accountNumber: 27}
+    // TODO: => PATCH /api/v0/checkingAccount/accountNumber
+    //  BODY: depositTransaction{withdrawal: 700, verificationPin: "69eS", accountNumber: 27}
 }

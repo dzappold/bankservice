@@ -25,7 +25,7 @@ class CheckingAccountService(private val checkingAccountRepository: CheckingAcco
                 if (existingAccount.pin == verificationPin)
                     checkingAccountRepository.save(checkingAccount)
                 else
-                    throw AuthenticationException("Authentication failed.")
+                    throw AuthenticationException("Invalid pin for this transaction.")
             }
             ?: accountNumberNotFound(checkingAccount.accountNumber)
 

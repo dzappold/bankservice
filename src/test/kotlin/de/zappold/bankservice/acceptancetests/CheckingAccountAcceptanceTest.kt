@@ -86,8 +86,19 @@ class CheckingAccountAcceptanceTest(
             val firstCustomer = Customer(null, "Q4UEAe89", "RU5", LocalDate.parse("2017-03-01"), Gender.DIVERSE)
             val secondCustomer = Customer(null, "1Hd", "Fm0", LocalDate.parse("2014-05-19"), Gender.FEMALE)
 
+            val firstCustomerNumber: Long = 6
+            val secondCustomerNumber: Long = 7
+            val accountNumber: Long = 8
+
             val validationPin = "fp9T7"
-            val checkingAccount = CheckingAccount(null, "R0hI", 0, 500, validationPin, mutableListOf(firstCustomer.copy(customerNumber = 6)))
+            val checkingAccount = CheckingAccount(
+                null,
+                "R0hI",
+                0,
+                500,
+                validationPin,
+                mutableListOf(firstCustomer.copy(customerNumber = firstCustomerNumber))
+            )
 
 
             mockMvc.post(CUSTOMER_BASE_PATH) {
@@ -108,13 +119,16 @@ class CheckingAccountAcceptanceTest(
                     status { isCreated() }
                     content {
                         contentType(MediaType.APPLICATION_JSON)
-                        json(objectMapper.writeValueAsString(checkingAccount.copy(accountNumber = 8)))
+                        json(objectMapper.writeValueAsString(checkingAccount.copy(accountNumber = accountNumber)))
                     }
                 }
 
             val expectedUpdatedCheckingAccount = checkingAccount.copy(
-                accountNumber = 8,
-                customer = mutableListOf(firstCustomer.copy(customerNumber = 6), secondCustomer.copy(customerNumber = 7))
+                accountNumber = accountNumber,
+                customer = mutableListOf(
+                    firstCustomer.copy(customerNumber = firstCustomerNumber),
+                    secondCustomer.copy(customerNumber = secondCustomerNumber)
+                )
             )
             mockMvc.patch(CHECKING_ACCOUNT_BASE_PATH) {
                 contentType = MediaType.APPLICATION_JSON
@@ -134,6 +148,5 @@ class CheckingAccountAcceptanceTest(
                 }
         }
     }
-
 
 }
